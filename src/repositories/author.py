@@ -27,5 +27,13 @@ def create_tag(tag=None):
         t = sm.session.query(TagTable).filter_by(tag=tag).first()
     return t
 
+def get_author_by_name(first_name, last_name):
+    data = {
+        'first_name': first_name,
+        'last_name': last_name
+    }
+    return _filter_author(**data)
 
+def _filter_author(**kwargs):
+    return sm.session.query(AuthorTable).filter_by(**kwargs)
 
