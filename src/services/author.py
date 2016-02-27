@@ -14,7 +14,11 @@ def create_author_service(first_name, last_name, date_of_birth=None, date_of_dea
         return False, None, {'msg': "Author exists already"}
 
 def get_all_authors_service():
-    return True, get_all_authors(), None
+    authors = []
+    for author in get_all_authors():
+        authors.append(Author(pk=author.id, first_name=author.first_name, last_name=author.last_name,
+                        date_of_birth=author.birth_date, date_of_death=author.date_of_death))
+    return True, authors, None
 
 
 def modify_author_service(author_pk, first_name=None, last_name=None, date_of_birth=None, date_of_death=None):

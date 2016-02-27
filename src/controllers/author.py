@@ -1,6 +1,7 @@
 from anillo.http import Ok, BadRequest
 
 from controllers.controller import Controller
+from controllers.utils import convert_body_to_dict
 
 from services.author import get_all_authors_service, create_author_service, get_author_by_pk_service,\
     modify_author_service, delete_author_service
@@ -17,7 +18,8 @@ class ListCreateAuthors(Controller):
         ok, result, errors = get_all_authors_service()
         if errors:
             return BadRequest(errors)
-        return Ok({'authors': [u.toJSONDict() for u in result['users']]})
+        result = [u.toJSONDict() for u in result] if result else []
+        return Ok({'authors': result})
 
     def post(self, request):
         """
@@ -25,7 +27,7 @@ class ListCreateAuthors(Controller):
         :param request:
         :return:
         """
-        data = request['body']
+        data = convert_body_to_dict(request['body'])
         created, author, errors = create_author_service(**data)
         if errors:
             return BadRequest(errors)
@@ -33,8 +35,8 @@ class ListCreateAuthors(Controller):
 
 
 class DetailUpdateDeleteAuthor(Controller):
-    def get(self, request):
-        author_pk = request.get('uri')
+    def get(self, request, pk=None):
+        author_pk = pk
         if not author_pk:
             return BadRequest({'msg': "No pk"})
 
@@ -43,19 +45,19 @@ class DetailUpdateDeleteAuthor(Controller):
             return BadRequest(errors)
         return Ok({'author': [author.toJSONDict()]})
 
-    def patch(self, request):
-        author_pk = request.get('uri')
+    def put(self, request, pk):
+        author_pk = pk
         if not author_pk:
             return BadRequest({'msg': "No pk"})
-        data = request['body']
+        data = convert_body_to_dict(request['body'])
 
         modified, author, errors = modify_author_service(author_pk, **data)
         if errors:
             return BadRequest(errors)
         return Ok({'author': [author.toJSONDict()]})
 
-    def delete(self, request):
-        author_pk = request.get('uri')
+    def delete(self, request, pk):
+        author_pk = pk
         if not author_pk:
             return BadRequest({'msg': "No pk"})
         deleted, author, errors = delete_author_service(author_pk)

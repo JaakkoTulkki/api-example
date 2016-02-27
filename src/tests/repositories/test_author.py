@@ -1,7 +1,8 @@
 import datetime
 
 from repositories.persistence.author import AuthorTable, BookTable, TagTable
-from repositories.author import create_author, create_book, create_tag
+from repositories.author import create_author, create_tag
+from repositories.book import create_book
 from repositories.session import session_manager as sm
 
 DATA = data ={
