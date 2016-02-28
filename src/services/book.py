@@ -63,3 +63,8 @@ def add_tag_to_book_service(book_pk, tag_id):
     tag = get_tag_by_pk(tag_id)
     add_tag_to_book(book, tag)
     return True, book, {}
+
+def get_tag_books_pk_service(pk):
+    tag = get_tag_by_pk(pk)
+    result = [Book(book) for book in tag.books]
+    return True, {tag.tag: result}, {}

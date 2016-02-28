@@ -1,8 +1,8 @@
 import datetime
 
 from repositories.persistence.author import AuthorTable, BookTable, TagTable
-from repositories.author import create_author, create_tag
-from repositories.book import create_book
+from repositories.author import create_author
+from repositories.book import create_book, create_tag
 from repositories.session import session_manager as sm
 
 DATA = data ={
@@ -57,7 +57,7 @@ def test_create_books_with_tags():
     assert author.books[1] is second_book
 
     # time to create tags for the book
-    tag = create_tag(tag="romance")
+    t, tag = create_tag(tag="romance")
     tag.books.append(book)
     tag.books.append(second_book)
     sm.session.add(tag)
@@ -68,7 +68,7 @@ def test_create_books_with_tags():
     assert book in tag.books
 
     # create another tag
-    second_tag = create_tag(tag="horror")
+    t, second_tag = create_tag(tag="horror")
     second_tag.books.append(book)
     sm.session.add(second_tag)
     sm.commit_session()
