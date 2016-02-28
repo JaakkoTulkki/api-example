@@ -11,17 +11,6 @@ def create_author(first_name, last_name=None, birth_date=None, date_of_death=Non
     return author
 
 
-def create_tag(tag=None):
-    (tag_exists, ), = sm.session.query(exists().where(TagTable.tag==tag))
-    if not tag_exists:
-        t = TagTable(tag=tag)
-        sm.session.add(t)
-        sm.commit_session()
-    else:
-        t = sm.session.query(TagTable).filter_by(tag=tag).first()
-    return t
-
-
 def get_all_authors():
     return sm.session.query(AuthorTable).all()
 

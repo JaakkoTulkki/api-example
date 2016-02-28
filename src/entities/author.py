@@ -8,7 +8,7 @@ class Author(Entity):
         if date_of_birth:
             self.date_of_birth = date_of_birth.strftime('%d-%m-%Y')
         if date_of_death:
-            self.date_of_birth = date_of_death.strftime('%d-%m-%Y')
+            self.date_of_death = date_of_death.strftime('%d-%m-%Y')
 
     def __repr__(self):
         return "{} {}".format(self.first_name, self.last_name)

@@ -3,8 +3,8 @@ from anillo.http import Ok, BadRequest
 from controllers.controller import Controller
 from controllers.utils import convert_body_to_dict
 
-from services.book import get_all_books_service, get_book_by_pk_service, delete_book_service, modify_book_service, \
-    create_book_service
+from services.book import get_all_books_service, get_book_by_pk_service, delete_book_service,\
+    modify_book_service, create_book_service, create_tag_service, list_tags_service
 
 
 class CreateListBook(Controller):
@@ -40,3 +40,15 @@ class DetailUpdateDeleteBook(Controller):
     def delete(self, request, pk):
         delete_book_service(pk)
         return Ok({'msg': "deleted"})
+
+class ListCreateTag(Controller):
+    def get(self, request):
+        ok, tags, errors = list_tags_service()
+        return Ok({'tags': [t.toJSONDict() for t in tags]})
+
+    def post(self, request):
+        data = convert_body_to_dict(request['body'])
+        ok, tag, errors = create_tag_service(**data)
+        if errors:
+            return BadRequest(errors)
+        return Ok({'tag': tag.toJSONDict()})
